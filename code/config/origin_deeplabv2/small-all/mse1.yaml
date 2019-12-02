@@ -1,0 +1,44 @@
+MODEL:
+  TYPE: "UDA_Segmentor"
+  BACKBONE:
+    TYPE: "R-DL-50-C1-C5"
+    PRETRAINED: True
+    WITH_IBN: False  
+  DECODER:
+    TYPE: "DeepLabV2Dedoder"
+  PREDICTOR:
+    TYPE: "UpsamplePredictor"
+    NUM_CLASSES: 19
+    LOSS: "CrossEntropy"
+  DISCRIMINATOR:
+    TYPE: ["Base-Predictor-SN", "Base-Encoder-SN"]
+    LOSS: "MSELoss"
+    WEIGHT: [0.001,0.01,]
+    LR: [0.0002, 0.0002]
+TRAIN:
+  EPOCHES: 20
+  OPTIMIZER: "Adam"
+  LR: 0.0002
+  BATCHSIZE: 16
+  ITER_REPORT: 50
+  # SCHEDULER: "CosineAnnealingLR_with_Restart"
+  # COSINEANNEALINGLR:
+  #   T_MAX: 5
+  #   T_MULT: 1.0
+  SAVE_ALL: False
+DATASET:
+  TYPE: "small-GTAVDataset"
+  ANNS: "../data/gtav_train.json"
+  IMAGEDIR: "../data/GTA5"
+  USE_AUG: True
+  NUM_SAMPLES: 4000
+  VAL:
+    TYPE: "small-CityscapesDataset"
+    ANNS: "../data/cityscapes_val.json"
+    IMAGEDIR: "../data/cityscapes"
+    RESIZE_SIZE: [640, 320]
+  TARGET:
+    TYPE: "small-CityscapesDataset"
+    ANNS: "../data/cityscapes_train.json"
+    IMAGEDIR: "../data/cityscapes"
+WORK_DIR: "small_log/uda_origin_multi_adam_glr2e-4_mse_dlr2e-4_w1e-2_1e-3_bs16/"
