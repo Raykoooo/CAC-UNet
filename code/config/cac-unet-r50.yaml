@@ -12,23 +12,23 @@ MODEL:
 TRAIN:
   EPOCHES: 20
   OPTIMIZER: "Ranger"
-  LR: 0.0001
+  LR: 0.001
   BATCHSIZE: 8
   ITER_REPORT: 100
   # SCHEDULER: "CosineAnnealingLR_with_Restart"
   # COSINEANNEALINGLR:
-  #   T_MAX: 5
+  #   T_MAX: 10
   #   T_MULT: 1.0
   SAVE_ALL: True
 DATASET:
   TYPE: "DigestDataset"
-  ANNS: "../digest/train_010.json"
+  ANNS: "../datalist/train_010.json"
   IMAGEDIR: "../data/pos-patches"
   USE_AUG: True
   RESIZE_SIZE: [512, 512]
   VAL:
     TYPE: "DigestDataset"
-    ANNS: "../digest/val_010.json"
+    ANNS: "../datalist/val_010.json"
     IMAGEDIR: "../data/pos-patches"
     RESIZE_SIZE: [512, 512]
 WORK_DIR: "log/cac-unet-r50"
