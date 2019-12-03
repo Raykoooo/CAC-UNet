@@ -7,6 +7,8 @@ import math
 import cv2
 from tqdm import tqdm
 import glob
+import multiprocessing
+
 Image.MAX_IMAGE_PIXELS=None
 
 
@@ -16,7 +18,7 @@ def is_blank(source):
     channels = cv2.split(source)
     return all([c.std() < 30 for c in channels])
 
-def do_img_split(suffix, input_path, out_dir, IM_WIDTH, IM_HEIGHT, size=3, is_filter=True, fill="black"):
+def do_img_split(suffix, input_path, out_dir, IM_WIDTH, IM_HEIGHT, size=3, is_filter=True, fill="white"):
     origin_im_name = osp.split(input_path)[-1]
     file_basename = osp.splitext(origin_im_name)[0].replace('_mask','')
     if not osp.exists(out_dir):
@@ -37,7 +39,7 @@ def do_img_split(suffix, input_path, out_dir, IM_WIDTH, IM_HEIGHT, size=3, is_fi
 
     # split
     path_list = []
-    for i in tqdm(range(rows)):
+    for i in range(rows):
         for j in range(cols):
             name = file_basename + '_%03dx%03d%s' % (i + 1, j + 1, suffix)
             out_path = osp.join(out_dir, name)
@@ -49,21 +51,38 @@ def do_img_split(suffix, input_path, out_dir, IM_WIDTH, IM_HEIGHT, size=3, is_fi
             else:
                 patch.save(out_path)
                 path_list.append((name, i, j))
+    print(input_path)
 
 def main():
     print('start split!')
     image_list = glob.glob('../data/tissue-train-pos-v1/*[0-9].jpg')
     label_list = glob.glob('../data/tissue-train-pos-v1/*mask.jpg')
-    
-    for i in tqdm(label_list):
-        # 512*3=1536
-        do_img_split('_mask.jpg', 
+
+    pool = multiprocessing.Pool(processes=6)
+    for i in label_list:
+        pool.apply_async(do_img_split, args=(
+            '_mask.jpg', 
              i,
              '../data/pos-patches/', 
              512,
              512,
-             size = 3,
-             is_filter = False)
+             3,
+             False,
+             "black"
+             ))
+    for i in image_list:
+        pool.apply_async(do_img_split, args=(
+            '_img.jpg', 
+             i,
+             '../data/pos-patches/', 
+             512,
+             512,
+             3,
+             True,
+             "white"
+             ))
+    pool.close()
+    pool.join()
     
 if __name__ == '__main__':
     main()
