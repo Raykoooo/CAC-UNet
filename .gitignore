@@ -1,0 +1,32 @@
+.vscode/
+mydata/
+data/
+*log*/
+
+
+__pycache__
+_ext
+*.pyc
+*.so
+
+*.png
+*.jpg
+*.out
+
+# ipython/jupyter notebooks
+*.ipynb
+**/.ipynb_checkpoints/
+
+
+# pytorch/python/numpy formats
+*.pth
+*.pkl
+*.npy
+
+code/config/digest_config
+data
+code/mydata
+.*
+.DS_Store
+.csv
+digest
