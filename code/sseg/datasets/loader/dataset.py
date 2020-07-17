@@ -5,7 +5,8 @@ import cv2
 
 from torch.utils.data import Dataset
 from .utils import *
-from ..aug.segaug import seg_aug, crop_aug
+# from ..aug.segaug import seg_aug, crop_aug
+from ..aug.segaug import seg_aug
 from ...models.registry import DATASET
 
 @DATASET.register("BaseDataset")
