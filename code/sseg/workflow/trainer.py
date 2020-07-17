@@ -3,8 +3,8 @@ import torch.nn.functional as F
 from torch import optim
 from torch.optim.lr_scheduler import CosineAnnealingLR, MultiStepLR
 from ..datasets.loader.dataset import BaseDataset
-from ..datasets.loader.gtav_dataset import GTAVDataset
-from ..datasets.loader.cityscapes_dataset import CityscapesDataset
+# from ..datasets.loader.gtav_dataset import GTAVDataset
+# from ..datasets.loader.cityscapes_dataset import CityscapesDataset
 from ..datasets.loader.digest_dataset import DigestDataset
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.sampler import  WeightedRandomSampler, RandomSampler
